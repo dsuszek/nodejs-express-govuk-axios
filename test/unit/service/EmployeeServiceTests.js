@@ -61,6 +61,23 @@ describe('EmployeeService', function () {
     This should fail, make code changes to make this test pass
      */
 
+    it('should throw exception when 500 error returned from axios', async () => {
+      var mock = new MockAdapter(axios);
+
+      mock.onGet(EmployeeService.URL + 1).reply(500);
+
+      var error;
+
+      try {
+        await EmployeeService.getEmployee(1)
+      } catch (e) {
+        var error = e.message
+      }
+      
+      expect(error).to.equal('Failed to get employee')
+    })
+
+
     /*
     Mocking Exercise 2
 
@@ -72,6 +89,19 @@ describe('EmployeeService', function () {
 
     This should pass without code changes
      */
+
+    it('should return employee when employee returned from axios', async () => {
+      var mock = new MockAdapter(axios);
+
+      const data = [employee];
+
+      mock.onGet(EmployeeService.URL + 1).reply(200, data);
+
+      var result = await EmployeeService.getEmployee(1);
+      
+      expect(result[0]).to.deep.equal(employee)
+    })
+
 
     /*
     Mocking Exercise 3
@@ -85,6 +115,24 @@ describe('EmployeeService', function () {
     This should fail, make code changes to make this test pass
      */
 
+    it('should throw exception when the id parameter is null', async () => {
+      var mock = new MockAdapter(axios);
+
+      mock.onGet(EmployeeService.URL + null).reply(404);
+
+      var error;
+
+      try {
+        await EmployeeService.getEmployee(null)
+      } catch (e) {
+        var error = e.message
+      }
+      
+      expect(error).to.equal('Invalid ID')
+    })
+
+
+
     /*
     Mocking Exercise 4
 
@@ -96,6 +144,24 @@ describe('EmployeeService', function () {
 
     This should fail, make code changes to make this test pass
      */
+
+    it('should throw exception when the id parameter doesn\'t exist', async () => {
+      var mock = new MockAdapter(axios);
+
+      mock.onGet(EmployeeService.URL + 0).reply(400);
+
+      var error;
+
+      try {
+        await EmployeeService.getEmployee(0)
+      } catch (e) {
+        var error = e.message
+      }
+      
+      expect(error).to.equal('Employee does not exist')
+    })
+
+
 
     /*
     Mocking Exercise 5
@@ -109,6 +175,19 @@ describe('EmployeeService', function () {
     This should pass without code changes
      */
 
+    it('should return id when id returned from axios', async () => {
+      var mock = new MockAdapter(axios);
+
+      const data = employee
+
+      mock.onPost(EmployeeService.URL, employee).reply(200, 1);
+
+      var result = await EmployeeService.createEmployee(employee)
+
+      expect(result).to.equal(1)
+    })
+
+
     /*
     Mocking Exercise 6
 
@@ -121,6 +200,25 @@ describe('EmployeeService', function () {
     This should fail, make code changes to make this test pass
      */
 
+    it('should throw exception when 400 error returned from axios', async () => {
+      var mock = new MockAdapter(axios);
+
+      const data = employee
+
+      mock.onPost(EmployeeService.URL, employee).reply(400);
+
+      var error;
+
+      try {
+        await EmployeeService.createEmployee(employee)
+      } catch (e) {
+        var error = e.message
+      }
+      
+      expect(error).to.equal('Invalid data')
+    })
+
+
      /*
     Mocking Exercise 7
 
@@ -132,5 +230,24 @@ describe('EmployeeService', function () {
 
     This should fail, make code changes to make this test pass
      */
+
+    it('should throw exception when 500 error returned from axios', async () => {
+      var mock = new MockAdapter(axios);
+
+      const data = employee
+
+      mock.onPost(EmployeeService.URL, employee).reply(500);
+
+      var error;
+
+      try {
+        await EmployeeService.createEmployee(employee)
+      } catch (e) {
+        var error = e.message
+      }
+      
+      expect(error).to.equal('Could not create employee')
+    })
+
     })
   })
