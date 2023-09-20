@@ -34,12 +34,15 @@ module.exports.getEmployee = async function (id) {
         console.log('Error: ' + e)
 
         if (id == null) {
+            done();
             throw new Error('Invalid ID')
         } 
 
         if (e.response.status == '400') {
+            done();
             throw new Error('Employee does not exist')
         } else {
+            done();
             throw new Error('Failed to get employee')
         }
     }
